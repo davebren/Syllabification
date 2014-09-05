@@ -1,5 +1,6 @@
 package com.eski.spanish.model.language.syllabifier;
 
+import com.eski.spanish.model.language.syllabifier.cluster.Cluster;
 import com.eski.spanish.model.language.syllabifier.cluster.ClusterClass;
 
 import org.apache.commons.collections4.queue.CircularFifoQueue;
@@ -15,15 +16,16 @@ public class SyllabifiedWord {
     public SyllabifiedWord(String s) {
         syllables = new LinkedList<Syllable>();
         syllables.add(new Syllable(s));
-        System.out.println(s);
-        syllables = match(new ClusterClass[] {ClusterClass.VOWEL, ClusterClass.CONSONANT, ClusterClass.VOWEL}, 2);
-
-
+        syllables = match(new ClusterClass[] {ClusterClass.VOWEL, ClusterClass.CONSONANT, ClusterClass.VOWEL}, 1);
+        syllables = match(new ClusterClass[] {ClusterClass.VOWEL, ClusterClass.CONSONANT, ClusterClass.CONSONANT, ClusterClass.VOWEL}, 1);
+        syllables = match(new ClusterClass[] {ClusterClass.VOWEL, ClusterClass.CONSONANT, ClusterClass.CONSONANT, ClusterClass.CONSONANT, ClusterClass.VOWEL} , 1);
+        syllables = match(new ClusterClass[] {ClusterClass.VOWEL, ClusterClass.CONSONANT, ClusterClass.CONSONANT, ClusterClass.CONSONANT, ClusterClass.CONSONANT, ClusterClass.VOWEL}, 1);
+        syllables = match(new ClusterClass[] {ClusterClass.HARD_VOWEL, ClusterClass.HARD_VOWEL}, 0);
     }
     public SyllabifiedWord(List<Syllable> syllables) {
         this.syllables = syllables;
     }
-    private List<Syllable> match(ClusterClass[] target, int breakIndex) {
+    private List<Syllable> match(ClusterClass[] target, int negativeOffsetToBreak) {
         List<Syllable> newSyllables = new LinkedList<Syllable>();
         CircularFifoQueue<ClusterClass> ringBuffer = new CircularFifoQueue<ClusterClass>(target.length);
         for (Syllable s : syllables) {
@@ -33,10 +35,9 @@ public class SyllabifiedWord {
             for (int i=0; i < s.clusters.size(); i++) {
                 ringBuffer.add(s.clusters.get(i).getClusterClass());
                 if (ringBuffer.size() < target.length) continue;
-
                 if (match(ringBuffer, target)) {
-                    brokenSyllables.add(new Syllable(s.clusters.subList(lastBrokenIndex, lastBrokenIndex+breakIndex)));
-                    lastBrokenIndex = lastBrokenIndex+breakIndex;
+                    brokenSyllables.add(new Syllable(s.clusters.subList(lastBrokenIndex, i - negativeOffsetToBreak)));
+                    lastBrokenIndex = i - negativeOffsetToBreak;
                 }
             }
             if (brokenSyllables.size() == 0) newSyllables.add(s);
@@ -62,11 +63,4 @@ public class SyllabifiedWord {
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(new SyllabifiedWord("chocolate"));
-        System.out.println(new SyllabifiedWord("comunidad"));
-        System.out.println(new SyllabifiedWord("pelo"));
-    }
-
 }

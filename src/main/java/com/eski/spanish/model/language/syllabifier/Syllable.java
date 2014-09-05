@@ -3,6 +3,7 @@ package com.eski.spanish.model.language.syllabifier;
 import com.eski.spanish.model.language.syllabifier.cluster.Cluster;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Syllable {
@@ -20,8 +21,13 @@ public class Syllable {
             }
         }
     }
+    // bl, br, cl, cr, dr, fl, fr, gl, gr, pl, pr, tr
     public Syllable(List<Cluster> clusters) {
         this.clusters = clusters;
+    }
+    public Syllable(Cluster cluster) {
+        clusters = new LinkedList<Cluster>();
+        clusters.add(cluster);
     }
     private static boolean paired(int index, String s) {
         if (index+1 >= s.length()) return false;
@@ -30,7 +36,16 @@ public class Syllable {
         return (
             ((a == 'c' || a == 'C') && (b == 'h' || b == 'H'))
             || ((a == 'l' || a == 'L') && (b == 'l' || b == 'L'))
-            || ((a == 'r' || a == 'r') && (b == 'r' || b == 'R'))
+            || ((a == 'r' || a == 'R') && (b == 'r' || b == 'R'))
+            || ((a == 'b' || a == 'B') && (b == 'l' || b == 'L'))
+            || ((a == 'b' || a == 'B') && (b == 'r' || b == 'R'))
+            || ((a == 'c' || a == 'C') && (b == 'l' || b == 'L'))
+            || ((a == 'c' || a == 'C') && (b == 'r' || b == 'R'))
+            || ((a == 'd' || a == 'D') && (b == 'r' || b == 'R'))
+            || ((a == 'f' || a == 'F') && (b == 'l' || b == 'L' || b == 'r' || b == 'R'))
+            || ((a == 'g' || a == 'G') && (b == 'l' || b == 'L' || b == 'r' || b == 'R'))
+            || ((a == 'p' || a == 'P') && (b == 'l' || b == 'L' || b == 'r' || b == 'R'))
+            || ((a == 't' || a == 'T') && (b == 'r' || b == 'R'))
         );
     }
 

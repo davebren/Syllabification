@@ -10,9 +10,9 @@ public enum ClusterClass {
         return false;
     }
     public String toString() {
-        if (this == HARD_VOWEL) return "hard vowel";
-        else if (this == SOFT_VOWEL) return "soft vowel";
-        else if (this == VOWEL) return "vowel";
-        else return "consonant";
+        if (this == HARD_VOWEL) return "HV";
+        else if (this == SOFT_VOWEL) return "SV";
+        else if (this == VOWEL) return "V";
+        else return "C";
     }
 }
