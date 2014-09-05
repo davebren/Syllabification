@@ -18,6 +18,7 @@ public class SyllabifiedWord {
         System.out.println(s);
         syllables = match(new ClusterClass[] {ClusterClass.VOWEL, ClusterClass.CONSONANT, ClusterClass.VOWEL}, 2);
 
+
     }
     public SyllabifiedWord(List<Syllable> syllables) {
         this.syllables = syllables;
@@ -26,13 +27,10 @@ public class SyllabifiedWord {
         List<Syllable> newSyllables = new LinkedList<Syllable>();
         CircularFifoQueue<ClusterClass> ringBuffer = new CircularFifoQueue<ClusterClass>(target.length);
         for (Syllable s : syllables) {
-            //System.out.println("syllable: " + s);
-            ClusterClass[] classes = new ClusterClass[target.length];
             List<Syllable> brokenSyllables = new LinkedList<Syllable>();
             ringBuffer.clear();
             int lastBrokenIndex = 0;
             for (int i=0; i < s.clusters.size(); i++) {
-                //System.out.println("cluster : " + s.clusters.get(i));
                 ringBuffer.add(s.clusters.get(i).getClusterClass());
                 if (ringBuffer.size() < target.length) continue;
 
@@ -50,23 +48,25 @@ public class SyllabifiedWord {
         return newSyllables;
     }
     private boolean match(CircularFifoQueue<ClusterClass> ringBuffer, ClusterClass[] target) {
-        String s = "";
-        String t = "";
-        for (ClusterClass c : ringBuffer) s += c + ", ";
-        for (ClusterClass c : target) t += c + ", ";
-        //System.out.println("match: " + s + " --- " + t);
         for (int i=0; i < target.length; i++) {
             if (!target[i].equalsX(ringBuffer.get(i))) return false;
         }
         return true;
     }
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Syllable syllable : syllables) {
+            sb.append(syllable);
+            sb.append(Syllabifier.getDividerSymbol());
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
+    }
 
     public static void main(String[] args) {
-        SyllabifiedWord s = new SyllabifiedWord("chocolate");
-        for (Syllable syllable : s.syllables) System.out.println(syllable.toString());
-        System.out.println(s.syllables.size());
-        SyllabifiedWord t = new SyllabifiedWord("chocolate");
-
+        System.out.println(new SyllabifiedWord("chocolate"));
+        System.out.println(new SyllabifiedWord("comunidad"));
+        System.out.println(new SyllabifiedWord("pelo"));
     }
 
 }

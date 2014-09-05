@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Syllabifier {
 
+    private static String DIVIDER_SYMBOL = "·";
 
     public static String convert(String input) {
         List<String> syllables = new LinkedList<String>();
@@ -26,6 +27,12 @@ public class Syllabifier {
         }
         sb.deleteCharAt(sb.length()-1);
         return sb.toString();
+    }
+    public static void setDividerSymbol(String dividerSymbol) {
+        DIVIDER_SYMBOL = dividerSymbol;
+    }
+    public static String getDividerSymbol() {
+        return DIVIDER_SYMBOL;
     }
 
 
