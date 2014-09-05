@@ -77,7 +77,7 @@ public class Tests extends TestCase {
             {"excluye", "ex-clu-ye"},
             {"extreme", "ex-tre-me"}
     };
-    
+
     private final static String[][] VCCCCV_SOURCE_TARGET = {
             {"inscribe", "ins-cri-be"},
             {"construye", "cons-tru-ye"},
